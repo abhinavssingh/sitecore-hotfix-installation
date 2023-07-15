@@ -1,0 +1,153 @@
+parameters:
+  env: ""
+  ArtifactName: ""
+  Package: ""
+
+stages:
+  - stage: Deploy_${{ parameters.env.name }}
+    displayName: "Deploy App to ${{ parameters.env.name }}"
+    jobs:
+      - deployment: Deploy_${{ parameters.env.name }}
+        displayName: Deploy - ${{ parameters.env.name }}
+        environment: ${{ parameters.env.name }}
+        pool: ${{ parameters.env.agentPool }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                
+                - task: AzureCLI@2
+                  displayName: CM
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/cm/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\cm\Sitecore_cm.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameCM }}' 
+                    
+                - task: AzureCLI@2
+                  displayName: CD
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/cd/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\cd\Sitecore_cd.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameCD }}'
+
+                - task: AzureCLI@2
+                  displayName: CortexProcessing
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/cortexprocessing/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\cortexprocessing\Sitecore_xp1cortexprocessing.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameCortexProcessing }}'
+
+                - task: AzureCLI@2
+                  displayName: CortexReporting
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/cortexreporting/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\cortexreporting\Sitecore_xp1cortexreporting.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameCortexReporting }}'
+
+                - task: AzureCLI@2
+                  displayName: XCCollect
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/xccollect/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\xccollect\Sitecore_xp1collection.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameXCCollect }}'
+                  enabled : false
+
+                - task: AzureCLI@2
+                  displayName: XCSearch
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/xcsearch/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\xcsearch\Sitecore_xp1collectionsearch.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameXCSearch }}'
+                  enabled : false
+
+                - task: AzureCLI@2
+                  displayName: XCRefData
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/xcrefdata/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\xcrefdata\Sitecore_xp1referencedata.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameXCRefData }}'
+                  enabled : false
+
+                - task: AzureCLI@2
+                  displayName: PRC
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/prc/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\prc\Sitecore_prc.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNamePRC }}'
+
+                - task: AzureCLI@2
+                  displayName: MAOPs
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/maops/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\maops\Sitecore_xp1marketingautomation.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameMAOPs }}'
+                  enabled :  false
+
+                - task: AzureCLI@2
+                  displayName: MAReporting
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/mareporting/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\mareporting\Sitecore_xp1marketingautomationreporting.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameMARep }}'
+
+                - task: AzureCLI@2
+                  displayName: SI
+                  inputs:
+                    azureSubscription: ${{ parameters.env.serviceConnection }}
+                    workingDirectory: "../${{ parameters.ArtifactName }}-$(Build.BuildId)"
+                    scriptType: 'ps'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '../${{ parameters.ArtifactName }}-$(Build.BuildId)/sitecore-hotfixes/Sitecore_10_2_1_rev_009331_PRE/xp-scaled/si/deploy.ps1'
+                    arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
+                      -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\si\Sitecore.IdentityServer_identityserver.cumulative.delta.scwdp.zip
+                      -WebAppName ${{ parameters.env.webAppNameSI }}'

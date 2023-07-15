@@ -1,0 +1,23 @@
+parameters:
+  ArtifactName: ""
+
+stages:
+  - stage: Build_Sitecore_HotFix
+    jobs:
+      - job: BUILDJOB
+        condition: not(or(failed(), canceled()))
+        displayName: BUILD JOB
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(agent.builddirectory)/s/'
+              Contents: '**/Sitecore_10_2_1_rev_009331_PRE/**'
+              TargetFolder: '$(build.artifactstagingdirectory)'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: '${{ parameters.ArtifactName }}-$(Build.BuildId)'
+              publishLocation: 'Container'

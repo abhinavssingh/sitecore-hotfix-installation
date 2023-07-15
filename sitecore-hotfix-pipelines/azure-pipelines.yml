@@ -1,0 +1,40 @@
+parameters:
+  - name: environments
+    type: object
+    default:
+      - name: "Development"
+        serviceConnection: "<enter your service principal connection>"
+        agentPool: "<enter your pool name>"
+        resourceGroupName: "<enter your group name>"
+        webAppNameCM: "<enter cm web app name>"
+        webAppNameCD: "enter cd web app name"
+        webAppNameCortexProcessing: "enter cortex-processing web app name"
+        webAppNameCortexReporting: "enter cortex-reporting web app name"
+        webAppNameMAOPs: "enter ma-ops web app name"
+        webAppNameMARep: "enter ma-rep web app name"
+        webAppNamePRC: "enter prc web app name"
+        webAppNameSI: "enter si web app name"
+        webAppNameXCCollect: "enter xc-collect web app name"
+        webAppNameXCRefData: "enter xc-refdata web app name"
+        webAppNameXCSearch: "enter xc-search web app name"
+      
+trigger:
+  - none
+
+variables:
+  template: vars.yml
+
+stages:
+  - template: build-pipeline.yml
+    parameters: 
+      ArtifactName: 'ContentBuildArtifact'
+  - ${{ each env in parameters.environments }}:
+      - template: release-pipeline.yml
+        parameters:
+          env: ${{env}}
+          ArtifactName: "ContentBuildArtifact"
+
+
+
+
+
