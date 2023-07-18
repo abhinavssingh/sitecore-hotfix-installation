@@ -75,7 +75,6 @@ stages:
                     arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
                       -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\xccollect\Sitecore_xp1collection.cumulative.delta.scwdp.zip
                       -WebAppName ${{ parameters.env.webAppNameXCCollect }}'
-                  enabled : false
 
                 - task: AzureCLI@2
                   displayName: XCSearch
@@ -88,7 +87,6 @@ stages:
                     arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
                       -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\xcsearch\Sitecore_xp1collectionsearch.cumulative.delta.scwdp.zip
                       -WebAppName ${{ parameters.env.webAppNameXCSearch }}'
-                  enabled : false
 
                 - task: AzureCLI@2
                   displayName: XCRefData
@@ -101,7 +99,6 @@ stages:
                     arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
                       -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\xcrefdata\Sitecore_xp1referencedata.cumulative.delta.scwdp.zip
                       -WebAppName ${{ parameters.env.webAppNameXCRefData }}'
-                  enabled : false
 
                 - task: AzureCLI@2
                   displayName: PRC
@@ -126,7 +123,6 @@ stages:
                     arguments: '-ResourceGroupName ${{ parameters.env.resourceGroupName }}
                       -WdpPackagePath sitecore-hotfixes\Sitecore_10_2_1_rev_009331_PRE\xp-scaled\maops\Sitecore_xp1marketingautomation.cumulative.delta.scwdp.zip
                       -WebAppName ${{ parameters.env.webAppNameMAOPs }}'
-                  enabled :  false
 
                 - task: AzureCLI@2
                   displayName: MAReporting
