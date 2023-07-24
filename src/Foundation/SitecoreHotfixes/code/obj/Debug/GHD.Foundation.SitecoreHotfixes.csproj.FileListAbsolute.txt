@@ -1,0 +1,6 @@
+C:\ghd\src\Foundation\SitecoreHotfixes\code\bin\Debug\GHD.Foundation.SitecoreHotfixes.dll
+C:\ghd\src\Foundation\SitecoreHotfixes\code\bin\Debug\GHD.Foundation.SitecoreHotfixes.pdb
+C:\ghd\src\Foundation\SitecoreHotfixes\code\obj\Debug\GHD.Foundation.SitecoreHotfixes.csproj.AssemblyReference.cache
+C:\ghd\src\Foundation\SitecoreHotfixes\code\obj\Debug\GHD.Foundation.SitecoreHotfixes.csproj.CoreCompileInputs.cache
+C:\ghd\src\Foundation\SitecoreHotfixes\code\obj\Debug\GHD.Foundation.SitecoreHotfixes.dll
+C:\ghd\src\Foundation\SitecoreHotfixes\code\obj\Debug\GHD.Foundation.SitecoreHotfixes.pdb
