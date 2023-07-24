@@ -1,4 +1,4 @@
-# siteocre-hotfix-installation
+# sitecore-hotfix-installation
 I have installed [Sitecore Cumulative Hotfixes](https://medium.com/@abhinavkumarsingh06/how-to-install-sitecore-hotfixes-on-paas-architecture-97b4cf6d7f8f) for 10.2.0 version. We can push hotfix package to existing repository, no need to create different repository. This way we will have single source of truth for code repository.
 
 We have individual deploy.ps1 file for each role because each role has different parameter.
